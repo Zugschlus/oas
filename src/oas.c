@@ -272,7 +272,7 @@ static void get_rules()
 	while (iterator_conf != NULL && rules == NULL /* first match only */) {
 		struct stringlist *pattern = iterator_conf->pattern;
 		while (pattern != NULL) {
-			if (cmdline_match(patternlist->text) == 0) {
+			if (cmdline_match(pattern->text) == 0) {
 				rules = append_rule(rules, iterator_conf->rule);
 				break; /* avoid loop in the rule-list if
 					 more than one pattern in

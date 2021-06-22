@@ -7,6 +7,9 @@ static int (*real_connect)(int socket, __CONST_SOCKADDR_ARG addr,
 extern int connect(int __fd, __CONST_SOCKADDR_ARG __addr, socklen_t __len)
 {
 	openlog("preloaded oas", LOG_PID, LOG_USER);
+#ifndef DEBUG
+	int orig_log_mask = setlogmask(LOG_UPTO(LOG_NOTICE));
+#endif
 	real_connect = dlsym(RTLD_NEXT, "connect");
 	const struct sockaddr *target = (*((struct sockaddr **)&__addr));
 	short int family = target->sa_family;
@@ -59,6 +62,9 @@ extern int connect(int __fd, __CONST_SOCKADDR_ARG __addr, socklen_t __len)
 			       errno);
 		}
 	}
+#ifndef DEBUG
+	setlogmask(orig_log_mask);
+#endif
 	closelog();
 	return real_connect(__fd, __addr, __len);
 }
