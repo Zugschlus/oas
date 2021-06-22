@@ -238,6 +238,7 @@ static struct config *readconfig()
 					syslog(LOG_WARNING,
 					       "readconfig(): failed to parse address mask: %s",
 					       s_mask);
+					free(next);
 					continue;
 				}
 			}
@@ -254,7 +255,6 @@ static void get_rules()
 {
 	if (rules != NULL)
 		return;
-	// rules = malloc(sizeof(struct rule));
 	if (conf == NULL)
 		conf = readconfig();
 	if (conf == NULL) {
@@ -265,28 +265,20 @@ static void get_rules()
 			rules->address[i] = 255;
 			rules->mask[i] = 255;
 		}
+		return;
 	}
 
-	//log_config(conf);
 	struct config *iterator_conf = conf;
-	while (iterator_conf != NULL) {
-		struct stringlist *sl = iterator_conf->pattern;
-		syslog(LOG_DEBUG, "get_rules(): sl = %p", sl);
-		log_rule(iterator_conf->rule);
-
-		while (sl != NULL) {
-			syslog(LOG_DEBUG, "get_rules(): sl-text = %p",
-			       sl->text);
-			if (cmdline_match(sl->text) == 0) {
-				syslog(LOG_DEBUG, "get_rules(): rules = %p",
-				       rules);
-				syslog(LOG_DEBUG,
-				       "get_rules(): conf->rule = %p",
-				       iterator_conf->rule);
+	while (iterator_conf != NULL && rules == NULL /* first match only */) {
+		struct stringlist *pattern = iterator_conf->pattern;
+		while (pattern != NULL) {
+			if (cmdline_match(patternlist->text) == 0) {
 				rules = append_rule(rules, iterator_conf->rule);
-				break; // avoid loop in the list
+				break; /* avoid loop in the rule-list if
+					 more than one pattern in
+					 the same pattern-list match */
 			}
-			sl = sl->next;
+			pattern = pattern->next;
 		}
 		iterator_conf = iterator_conf->next;
 	}
