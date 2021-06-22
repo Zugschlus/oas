@@ -321,7 +321,7 @@ int oas_address_score(void *addr)
 		}
 		syslog(LOG_DEBUG, "Number of rules: %d", rulenum);
 	}
-	syslog(LOG_DEBUG, "is_useable returns %d for %s", retval,
+	syslog(LOG_DEBUG, "oas_address_score returns %d for %s", retval,
 	       addr != NULL ? to02x(addr, 16) : "NULL");
 	return retval;
 }

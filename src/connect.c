@@ -35,14 +35,8 @@ extern int connect(int __fd, __CONST_SOCKADDR_ARG __addr, socklen_t __len)
 				if (score < bestscore) {
 					bestscore = score;
 					bestaddr = curr;
-					/*
-					currently a simple list with 
-					decreasing score is checked,
-					so we can break after the first match
-					*/
-					if (bestscore < 10000) {
-						break;
-					}
+					if (bestscore == 1)
+						break; // no better match possible
 				}
 			}
 			next = next->ifa_next;
