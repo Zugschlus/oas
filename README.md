@@ -19,7 +19,7 @@ it does without oas.
 1. Build oas.so with ./compile
 2. Place it at your convenience
 3. Let the environment variable LD_PRELOAD point to it
-4. Create an configuration file
+4. Create a configuration file
 5. Let the environment variable OAS_CONF_F point to it
 6. Start your programm
 
@@ -29,7 +29,7 @@ Lines starting with # or containing nothing but whitespaces are ignored.
 A line starting with
 cmdlines:
 starts a list of Posix Extended Regular expressions, each on a line of
-its own. If one of them matches your cmdline the corresponding address pattern list will be used and all further cmdline-patterns will be ignored. 
+its own. If your cmdline contains one of them the corresponding address pattern list will be used and all further cmdline-patterns will be ignored. 
 
 A line starting with
 addresses:
@@ -38,6 +38,8 @@ starts a list of address Pattern, again one per line. If your system has a confi
 An address pattern specifies the value of an address to match and 
 a mask for relevant bits. The mask may be given as prefix length.
 Address and mask are separated by "/".
+
+You may have a look at config_example.
 
 There are currently no sanity checks for the configuration.
 

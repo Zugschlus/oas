@@ -1,0 +1,55 @@
+# this is an example
+# it hopefully shows some caveats
+# but it is not really reasonable
+
+cmdlines:
+ssh.*
+# .* is obsolete since partial match of cmdline is enough, so 
+ssh
+# gives the same result
+scp  user@
+# will not match due to format of /proc/self/cmdline
+# use only single space to separate arguments:
+scp user@
+
+addresses:
+2003::dead:beaf:babe/ffff:e000::ffff:ffff:ffff
+# address space of DTE, ending with dead:beaf:babe
+2003::dead:beaf:babe/2003::dead:beaf:babe
+# lot of zero bits in the mask, so this
+# neither has to be in DTE address space nor
+# end with dead:beaf:babe
+2003::/19
+# any address in DTE address space
+
+cmdlines:
+firefox
+chromium
+
+addresses:
+2a02:908::/33
+# address space of unity media
+2003::dead:beaf:babe/FFFF:E000::FFFF:FFFF:FFFF
+# address space of DTE, ending with dead:beaf:babe
+
+
+
+
+cmdlines:
+telnet myhost1 
+
+addresses:
+2000::b78a/c000::FFFF
+
+cmdlines:
+telnet myhost2 
+
+addresses:
+2000::b78a/c000::FFFF
+2a02:908::/33
+
+cmdlines:
+telnet
+# for all telnet except to myhost1 and  myhost2
+addresses:
+2a02:908::/33
