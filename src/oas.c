@@ -110,7 +110,7 @@ static void log_rule(struct rule *rl)
 {
 	struct rule *r = rl;
 	while (r != NULL) {
-		syslog(LOG_DEBUG, "%p %s/%s %p", r, to02x(r->address, 16),
+		syslog(LOG_DEBUG, "rule: %p %s/%s %p", r, to02x(r->address, 16),
 		       to02x(r->mask, 16), r->next);
 		if (r == r->next) {
 			syslog(LOG_WARNING, "rule->next points to rule! p=%p",
@@ -282,16 +282,15 @@ static void get_rules()
 		}
 		iterator_conf = iterator_conf->next;
 	}
+	log_rule(rules);
 }
+
 int oas_address_score(void *addr)
 {
 	int retval = 10000;
 	if (addr != NULL) {
 		unsigned char *caddr = addr;
 		get_rules();
-		syslog(LOG_DEBUG,
-		       "oas_address_score(): dump of ruleset follows.");
-		log_rule(rules);
 		struct rule *iter = rules;
 		int rulenum = 1;
 		while (iter != NULL && retval == 10000) {
@@ -319,7 +318,6 @@ int oas_address_score(void *addr)
 			}
 			iter = iter->next;
 		}
-		syslog(LOG_DEBUG, "Number of rules: %d", rulenum);
 	}
 	syslog(LOG_DEBUG, "oas_address_score returns %d for %s", retval,
 	       addr != NULL ? to02x(addr, 16) : "NULL");
