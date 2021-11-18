@@ -42,7 +42,7 @@ in-kernel mechanisms can work as designed.
 
 If all your software allows to set the IPv6 source address, you
 probably don't nee oas as well. It might be, however, easier to
-have source address selection configured in a cental place.
+have source address selection configured in a central place.
 ## Installation
 1. Build oas.so with ./compile
 2. Place it at your convenience
