@@ -2,6 +2,27 @@
 Output Address Selection
 ## Purpose
 Select the output address based on cmdline.
+## Motivation
+oas is a library wrapper around the connect() syscall and can be
+used to influence the IPv6 source address for outgoing TCP connections.
+
+In IPv6, nodes might be using multiple IP addresses simultaneously.
+In fact, this is the normal case in many networks. Different IP
+networks might be configured with different privileges, making it
+important to use the correct source IPv6 address for outgoing
+connections.
+
+While many programs allow selecting IPv6 source addresses,
+others don't. Also, the source address mechanisms provided by
+the operating system (see RFC6724, ip addrlabel on Linux) have
+some known shortcomings. For example, Linux takes the routing
+decision for locally originated datagrams before doing IPv6 source
+address selection, which might cause the system to send the
+outgoing datagram to the wrong default gateway where it might
+be dropped.
+
+oas influences the IPv6 source address of an outgoing connection
+early enough for the routing decision to be taken correctly.
 ## Prerequisites
 Any nonhistorical Linux System with /proc and glibc
 should do. If it doesn't work on Debian Stable, it's a bug.
@@ -14,7 +35,14 @@ real connect(), oas tries to bind an address to the socket, according
 to the configuration. If no available address matches the configuration
 or the bind(2) fails for any reason, your program should work like
 it does without oas.
+## When you don't need oas
+oas is not needed on a router. When a datagram comes in from
+another system, its source address is already set and thus the
+in-kernel mechanisms can work as designed.
 
+If all your software allows to set the IPv6 source address, you
+probably don't nee oas as well. It might be, however, easier to
+have source address selection configured in a cental place.
 ## Installation
 1. Build oas.so with ./compile
 2. Place it at your convenience
