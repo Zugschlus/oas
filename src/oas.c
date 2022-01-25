@@ -223,7 +223,7 @@ static struct config *readconfig()
 			next->next = NULL;
 			char *s_addr = strtok(line, "/");
 			char *s_mask = strtok(NULL, "/");
-			syslog(LOG_DEBUG, "address: %s splitted: %s and %s",
+			syslog(LOG_DEBUG, "address: %s split: %s and %s",
 			       line, s_addr, s_mask);
 			if (inet_pton(AF_INET6, s_addr, next->address) != 1) {
 				continue;
