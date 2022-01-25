@@ -177,7 +177,7 @@ static struct config *readconfig()
 	char *cfgfilename = getenv("OAS_CONF_F");
 	if (cfgfilename == NULL) {
 		syslog(LOG_WARNING,
-		       "enviroment does not contain Variable OAS_CONF_F");
+		       "environment does not contain Variable OAS_CONF_F");
 		return retval;
 	}
 	FILE *fd = fopen(cfgfilename, "r");
