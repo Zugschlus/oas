@@ -45,11 +45,17 @@ probably don't nee oas as well. It might be, however, easier to
 have source address selection configured in a central place.
 ## Installation
 1. Build oas.so with ./compile
-2. Place it at your convenience
-3. Let the environment variable LD_PRELOAD point to it
-4. Create a configuration file
-5. Let the environment variable OAS_CONF_F point to it
-6. Start your programm
+3. Place it at your convenience
+
+Alternatively, use ./configure, make, make install
+
+## How to use
+oas is a wrapper around the connect() call. Therefore, it needs to
+be preloaded before the actual binary is invoked.
+Add the full path to oas.so to the environment variable LD_PRELOAD.
+
+oas is a no-op if there is no configuration. Create a configuration
+file and point the environment variable OAS_CONF_F to it.
 
 ## Configuration
 
@@ -71,4 +77,6 @@ You may have a look at config_example.
 
 There are currently no sanity checks for the configuration.
 
-
+## Debugging
+oas logs to syslog when it selects a src address. If you compile with -DDEBUG,
+there is more debugging information.
