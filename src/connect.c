@@ -7,9 +7,28 @@ static int (*real_connect)(int socket, __CONST_SOCKADDR_ARG addr,
 extern int connect(int __fd, __CONST_SOCKADDR_ARG __addr, socklen_t __len)
 {
 	openlog("preloaded oas", LOG_PID, LOG_USER);
-#ifndef DEBUG
+	char *loglevel = getenv("OAS_LOGLEVEL");
 	int orig_log_mask = setlogmask(LOG_UPTO(LOG_NOTICE));
-#endif
+	if (loglevel != NULL) {
+		if (!strncasecmp("DEBUG", loglevel, 5)) {
+			setlogmask(LOG_UPTO(LOG_DEBUG));
+		} else if (!strncasecmp("INFO", loglevel, 4)) {
+			setlogmask(LOG_UPTO(LOG_INFO));
+		} else if (!strncasecmp("NOTICE", loglevel, 6)) {
+			setlogmask(LOG_UPTO(LOG_NOTICE));
+		} else if (!strncasecmp("WARN", loglevel, 4)) {
+			setlogmask(LOG_UPTO(LOG_WARNING));
+		} else if (!strncasecmp("ERR", loglevel, 3)) {
+			setlogmask(LOG_UPTO(LOG_ERR));
+		} else if (!strncasecmp("CRIT", loglevel, 4)) {
+			setlogmask(LOG_UPTO(LOG_CRIT));
+		} else if (!strncasecmp("ALERT", loglevel, 5)) {
+			setlogmask(LOG_UPTO(LOG_ALERT));
+		} else if (!strncasecmp("EMERG", loglevel, 5)) {
+			setlogmask(LOG_UPTO(LOG_EMERG));
+		}
+	}
+
 	real_connect = dlsym(RTLD_NEXT, "connect");
 	const struct sockaddr *target = (*((struct sockaddr **)&__addr));
 	short int family = target->sa_family;
@@ -66,9 +85,7 @@ extern int connect(int __fd, __CONST_SOCKADDR_ARG __addr, socklen_t __len)
 			freeifaddrs(iflist);
 		}
 	}
-#ifndef DEBUG
 	setlogmask(orig_log_mask);
-#endif
 	closelog();
 	return real_connect(__fd, __addr, __len);
 }

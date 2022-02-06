@@ -23,6 +23,7 @@ be dropped.
 
 oas influences the IPv6 source address of an outgoing connection
 early enough for the routing decision to be taken correctly.
+
 ## Prerequisites
 Any nonhistorical Linux System with /proc and glibc
 should do. If it doesn't work on Debian Stable, it's a bug.
@@ -49,7 +50,8 @@ have source address selection configured in a central place.
 3. Let the environment variable LD_PRELOAD point to it
 4. Create a configuration file
 5. Let the environment variable OAS_CONF_F point to it
-6. Start your programm
+6. Adjust the environment variable OAS_LOGLEVEL to your needs
+7. Start your programm
 
 ## Configuration
 
@@ -70,5 +72,10 @@ Address and mask are separated by "/".
 You may have a look at config_example.
 
 There are currently no sanity checks for the configuration.
+
+## Logging
+Logging goes to syslog. You can set the level with the environment variable
+OAS_LOGLEVEL. Default is NOTICE. Available are EMERG,ALERT,CRIT,ERR,WARN,NOTICE,INFO and DEBUG.
+
 
 
