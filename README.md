@@ -53,6 +53,9 @@ have source address selection configured in a central place.
 6. Adjust the environment variable OAS_LOGLEVEL to your needs
 7. Start your programm
 
+oas is packaged in Debian GNU/Linux (unstable suite) as
+liboas0, so just need to apt install liboas0 to take advantage of oas.
+
 ## Configuration
 
 Lines starting with # or containing nothing but whitespaces are ignored.
